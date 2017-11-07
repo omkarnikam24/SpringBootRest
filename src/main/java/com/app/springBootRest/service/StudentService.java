@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import com.app.springBootRest.pojo.StudentPOJO;
 
 public interface StudentService extends CrudRepository<StudentPOJO, Integer>{
-	// select mo from Person mo join fetch mo.cars c where c.model = ?
+
 	@Query(value="from StudentPOJO s join fetch s.courses c where s.studentId = ?1 and c.courseId = ?2")
 	List<StudentPOJO> findDetailsForCourse(Integer studentId , Integer courseId );
 }
