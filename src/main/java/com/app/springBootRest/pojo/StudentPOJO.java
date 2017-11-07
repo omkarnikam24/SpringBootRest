@@ -1,6 +1,5 @@
 package com.app.springBootRest.pojo;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -8,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.springframework.stereotype.Component;
@@ -27,9 +26,9 @@ public class StudentPOJO {
 	@Column(unique = false, nullable = false, length=20)
 	private String studentName;
 	
-	@OneToMany( mappedBy = "student" , cascade = CascadeType.ALL, orphanRemoval = true )
-	private final List<CoursePOJO> courses = new ArrayList<CoursePOJO>();
-
+	@ManyToMany( mappedBy = "students" , cascade = CascadeType.MERGE )
+	private List<CoursePOJO> courses;
+	
 	public Integer getStudentId() {
 		return studentId;
 	}
@@ -48,6 +47,10 @@ public class StudentPOJO {
 
 	public List<CoursePOJO> getCourses() {
 		return courses;
+	}
+
+	public void setCourses(List<CoursePOJO> courses) {
+		this.courses = courses;
 	}
 
 	@Override

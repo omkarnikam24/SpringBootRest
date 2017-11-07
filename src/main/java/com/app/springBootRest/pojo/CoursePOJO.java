@@ -1,12 +1,14 @@
 package com.app.springBootRest.pojo;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.springframework.stereotype.Component;
@@ -28,9 +30,18 @@ public class CoursePOJO {
 	@Column(unique = false, nullable = true, length=50)
 	private String courseDesc;
 	
-	@ManyToOne
+	
+	/*@ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+        name = "Employee_Project", 
+        joinColumns = { @JoinColumn(name = "employee_id") }, 
+        inverseJoinColumns = { @JoinColumn(name = "project_id") }
+    )
+    Set<Project> projects = new HashSet<>();*/
+	
+	@ManyToMany
 	@JoinColumn( name = "studentId", nullable = false )
-	private StudentPOJO student;
+	private List<StudentPOJO> students;
 
 	public Integer getCourseId() {
 		return courseId;
@@ -56,18 +67,18 @@ public class CoursePOJO {
 		this.courseDesc = courseDesc;
 	}
 
-	public StudentPOJO getStudent() {
-		return student;
+	public List<StudentPOJO> getStudents() {
+		return students;
 	}
 
-	public void setStudent(StudentPOJO student) {
-		this.student = student;
+	public void setStudents(List<StudentPOJO> students) {
+		this.students = students;
 	}
 
 	@Override
 	public String toString() {
 		return "CoursePOJO [courseId=" + courseId + ", courseName=" + courseName + ", courseDesc=" + courseDesc
-				+ ", student=" + student + "]";
+				+ ", students=" + students + "]";
 	}
 	
 }
