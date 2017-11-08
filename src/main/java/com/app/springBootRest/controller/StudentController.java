@@ -3,8 +3,8 @@ package com.app.springBootRest.controller;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,20 +31,23 @@ public class StudentController {
 	CoursePOJO course;
 	
 	
-	// Method to get List of Courses for a particular Student
+	// Method to get a List of Courses for a particular Student
 	@GetMapping("/students/{studentId}/courses")
 	public List<CoursePOJO> getCoursesForStudent( @PathVariable int studentId ){
 		
+		System.out.println("In Get Courses for Student Service Controller");
 		List<CoursePOJO> list = new ArrayList<>();
 		student = studentService.findOne(studentId);
 		
+		System.out.println( "Returned Student : " + student );
 		for (CoursePOJO course : student.getCourses()) {
 			list.add(course);
 		}
+		
 		return list;
 	}
 	
-	// Method to a particular Course of a particular Student
+	// Method to get a particular Course of a particular Student
 	@GetMapping("/students/{studentId}/courses/{courseId}")
 	public CoursePOJO getDetailsForCourse( @PathVariable int studentId , @PathVariable int courseId ){
 		
@@ -58,20 +61,13 @@ public class StudentController {
 	@PostMapping("students/addStudent")
 	public ResponseEntity<Void> newStudent( @RequestBody StudentPOJO newStudent ){
 		
-		System.out.println("In Add Service");
-		List<CoursePOJO> list = new ArrayList<>();
-		for (CoursePOJO course : newStudent.getCourses()) {
-			course = courseService.findOne(course.getCourseId());
-			list.add(course);
-		}
+		System.out.println("In Add Service Controller");
 		
-		newStudent.setCourses(list);
-		student = studentService.save(newStudent);
-		System.out.println("Student Added : " + student.toString());
+		student = studentService.addNewStudent( newStudent );
 		
 		if ( student == null )
-			return ResponseEntity.noContent().build();
-		return ResponseEntity.ok().build();
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
 	
@@ -84,8 +80,8 @@ public class StudentController {
 		System.out.println("Course Added : " + course.toString());
 		
 		if ( course == null )
-			return ResponseEntity.noContent().build();
-		return ResponseEntity.ok().build();
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
 	

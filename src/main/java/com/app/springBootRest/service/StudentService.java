@@ -10,4 +10,6 @@ public interface StudentService extends CrudRepository<StudentPOJO, Integer>{
 
 	@Query(value="from StudentPOJO s join fetch s.courses c where s.studentId = ?1 and c.courseId = ?2")
 	List<StudentPOJO> findDetailsForCourse(Integer studentId , Integer courseId );
+	
+	StudentPOJO addNewStudent( StudentPOJO studentDetails );
 }

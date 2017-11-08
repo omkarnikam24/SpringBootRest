@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,16 +31,7 @@ public class CoursePOJO {
 	@Column(unique = false, nullable = true, length=50)
 	private String courseDesc;
 	
-	
-	/*@ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-        name = "Employee_Project", 
-        joinColumns = { @JoinColumn(name = "employee_id") }, 
-        inverseJoinColumns = { @JoinColumn(name = "project_id") }
-    )
-    Set<Project> projects = new HashSet<>();*/
-	
-	@ManyToMany
+	@ManyToMany ( fetch = FetchType.EAGER )
 	@JoinColumn( name = "studentId", nullable = false )
 	private List<StudentPOJO> students;
 
@@ -67,6 +59,7 @@ public class CoursePOJO {
 		this.courseDesc = courseDesc;
 	}
 
+	 @ManyToMany(mappedBy = "courses")
 	public List<StudentPOJO> getStudents() {
 		return students;
 	}
