@@ -20,94 +20,138 @@ public class StudentController {
 
 	@Autowired
 	StudentService studentService;
-	
+
 	@Autowired
 	CourseService courseService;
-	
+
 	@Autowired
 	StudentPOJO student;
-	
+
 	@Autowired
 	CoursePOJO course;
+
+
+	// Method to get all Students
+	@GetMapping("/students/")
+	public List<StudentPOJO> getAllStudents( ){
+
+		System.out.println("In Get All Students Service");
+		List<StudentPOJO> list = new ArrayList<>();
+		for (StudentPOJO student : studentService.findAll() ) {
+			list.add(student);
+		}
+		System.out.println( "Returned Student : " + student );
+
+		return list;
+	}
 	
-	
+	// Method to get all courses
+	@GetMapping("/courses/")
+	public List<CoursePOJO> getAllCourses( ){
+
+		System.out.println("In Get All Students Service");
+		List<CoursePOJO> list = new ArrayList<>();
+		for (CoursePOJO course : courseService.findAll() ) {
+			list.add(course);
+		}
+
+		return list;
+	}
+
 	// Method to get a List of Courses for a particular Student
 	@GetMapping("/students/{studentId}/courses")
 	public List<CoursePOJO> getCoursesForStudent( @PathVariable int studentId ){
-		
+
 		System.out.println("In Get Courses for Student Service Controller");
 		List<CoursePOJO> list = new ArrayList<>();
 		student = studentService.findOne(studentId);
-		
+
 		System.out.println( "Returned Student : " + student );
 		for (CoursePOJO course : student.getCourses()) {
 			list.add(course);
 		}
-		
+
 		return list;
 	}
 	
+	// Method to get a List of Courses for a particular Student
+	@GetMapping("/courses/{courseId}/students")
+	public List<StudentPOJO> getStudentsOfCourse( @PathVariable int courseId ){
+
+		System.out.println("In Get Students of a Course Service");
+		List<StudentPOJO> list = new ArrayList<>();
+		course = courseService.findOne(courseId);
+
+		System.out.println( "Returned Course : " + course );
+		for (StudentPOJO student : course.getStudents()) {
+			list.add(student);
+		}
+
+		return list;
+	}
+
+
 	// Method to get a particular Course of a particular Student
 	@GetMapping("/students/{studentId}/courses/{courseId}")
 	public CoursePOJO getDetailsForCourse( @PathVariable int studentId , @PathVariable int courseId ){
-		
+
 		List<StudentPOJO> list = new ArrayList<>();
 		list = studentService.findDetailsForCourse(studentId, courseId);
-		
+
 		return list.get(0).getCourses().get(0);
 	}
-	
+
 	// Method to add a new student
 	@PostMapping("students/addStudent")
 	public ResponseEntity<Void> newStudent( @RequestBody StudentPOJO newStudent ){
-		
+
 		System.out.println("In Add Service Controller");
-		
+
 		student = studentService.addNewStudent( newStudent );
-		
+
 		if ( student == null )
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
-	
-	
+
+
 	// Method to add a new course
-	@PostMapping("students/addCourse")
+	@PostMapping("courses/addCourse")
 	public ResponseEntity<Void> newCourse( @RequestBody CoursePOJO newCourse ){
-		
+
 		System.out.println("In Add Service");
 		course = courseService.save(newCourse);
 		System.out.println("Course Added : " + course.toString());
-		
+
 		if ( course == null )
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
-	
-	
+
+
 	/*@PostMapping("students/{studentId}/courses")
 	public ResponseEntity<Void> registerStudentforCourse( @PathVariable int studentId , 
 			@RequestBody CoursePOJO newCourse ){
-		
+
 		System.out.println("In Register Course Service");
 
 		// Get the student object with the given Student Id to add it while 
 		// persisting Course object
 		try {
 			student = studentService.findOne(studentId);
-			
+
 			if ( student != null ) {
 				// save course
 			}
 			else {
 				// throw an error
 			}
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 
 		return ResponseEntity.ok().build();
 	}*/
-	
+
 }

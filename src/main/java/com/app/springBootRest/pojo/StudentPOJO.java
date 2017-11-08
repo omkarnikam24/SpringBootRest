@@ -29,7 +29,7 @@ public class StudentPOJO {
 	@Column(unique = false, nullable = false, length=20)
 	private String studentName;
 	
-	@ManyToMany( fetch = FetchType.EAGER ,  cascade = CascadeType.ALL )
+	@ManyToMany( fetch = FetchType.EAGER , cascade = CascadeType.ALL )
 	@JoinTable(name = "student_course", joinColumns = @JoinColumn(name = "studentId", referencedColumnName = "studentId"), 
 		inverseJoinColumns = @JoinColumn(name = "courseId", referencedColumnName = "courseId"))
 	private List<CoursePOJO> courses;

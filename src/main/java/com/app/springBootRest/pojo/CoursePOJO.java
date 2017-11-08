@@ -2,6 +2,7 @@ package com.app.springBootRest.pojo;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,7 +32,7 @@ public class CoursePOJO {
 	@Column(unique = false, nullable = true, length=50)
 	private String courseDesc;
 	
-	@ManyToMany ( fetch = FetchType.EAGER )
+	@ManyToMany ( fetch = FetchType.EAGER , cascade = CascadeType.ALL)
 	@JoinColumn( name = "studentId", nullable = false )
 	private List<StudentPOJO> students;
 
